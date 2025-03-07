@@ -16,349 +16,81 @@
 
 % include metadata in the generated pdf file
 \pdfinfo{
-    /Title (The Occidental Computer Science Comprehensive Project: Goals, Timeline, Format, and Advice)
-    /Author (Justin Li)
+    /Title (Literature Review)
+    /Author (Gary Wang)
 }
 
 % set the title and author information
-\title{The Occidental Computer Science Comprehensive Project: \\ Goals, Timeline, Format, and Advice}
-\author{Justin Li}
+\title{Literature Review}
+\author{Gary Wang}
 \affiliation{Occidental College}
-\email{justinnhli@oxy.edu}
+\email{}
 
 \begin{document}
 
 \maketitle
 
-\section{Introduction}
 
-This document serves describes the Oxy CS Comps process.
-The first section describes the timeline of comps, as well as the main requirements of a comps project.
-Since one of the main deliverable is a final paper, there is then an interlude on {\LaTeX}, which you will use to write the paper.
-This document then goes into the sections of that final paper and what is expected of it.
-We conclude with some miscellaneous tips for successfully completing comps.
 
-\section{Computer Science Comps}
 
-Occidental's ``Comprehensive Requirement'' is a graduation requirement that serves two goals: ``to provide an opportunity for senior students to synthesize the essential[s] [...] of their academic field'', and ``to provide an opportunity for students to demonstrate competence in their field'' \cite{OccidentalComps}.
-For computer science, the breadth of the field means that comps leans heavily towards the second goal: most CS comps are large coding projects that showcase what a student has learned in their four years at Oxy.
-In that sense, a CS comps project is more like a Studio Arts comps project: you could draw from multiple subfields or focus on just one, but the essence is to take on a complex project of your choice while situating it within the methods of CS.
+\section{Technical Background}
 
-\subsection{Timeline}
+The application and importance of Image Based 3D reconstruction are numerous. The difficult task of 3D reconstruction facilitates a number of important technologies such as vr, autonomous vehicles, robotic navigation , 3D computer vision and animation. Its rapid growth as a research field underscores its significance in advancing modern technology.
 
-Since comps is a significant undertaking, the CS major curriculum has two courses to support comps projects.
-Most students will take CS Junior Seminar in the spring of their junior year, then take CS Senior Seminar in the fall of their senior year.
-One of the main goals of Junior Seminar is to prepare students for their comps project, including selecting a topic, exploring the literature, and writing a detailed proposal of what they will do.
-The entirety of Senior Seminar is dedicated to students completing their comps; however, it is necessary to separate the Senior Seminar course from the comps graduation requirement.
-Senior Seminar is a required course for the CS major, and it concludes at the end of the fall semester with a grade.
-Comps, on the other hand, is an Oxy graduation requirement, and concludes at the end of the senior year with either ``fail'', ``pass'', or ``pass with distinction'' \cite{OccidentalComps}.
-While the sole purpose of Senior Seminar is to support students working on comps, it is possible for a student to complete the \textit{course} without completing the \textit{graduation requirement}.
-This could occur, for example, if the student ran out of time to finish the project, but submitted all the assignments for Senior Seminar.
-In that case, the student will continue working in the spring senior semester to complete their comps, until they have a ``pass'' or ``pass with distinction'' result.
-A summary of this timeline can be found in Table \ref{tbl:timeline}.
+3D gaussian splatting is an emerging method of representing radiance fields, gaining significant attention in the field of 3D graphics reconstruction and representation due to its real-time rendering capabilities, fast training times, and high fidelity and quality in output. To contextualize the incredible advancements this section briefly covers radiance fields and Nerfs before covering 3D gaussians.
 
-\begin{table}
-    \footnotesize
-    \begin{tabular}{r|cl}
-        \textbf{Semester}       &  \textbf{Course}  &  \textbf{Deliverable(s)}          \\
-        \hline \\
-        \textbf{Junior Spring}  &  COMP 390         &  Comps proposal; Tutorial report  \\
-        \textbf{Summer}         &  -                &  Additional research              \\
-        \textbf{Senior Fall}    &  COMP 490         &  Comps final paper; Code repo     \\
-        \textbf{Senior Spring}  &  -                &  Revisions; Honors                \\
-    \end{tabular}
-    \caption{Timeline summary for comps.}
-    \label{tbl:timeline}
-\end{table}
+Radiance fields are used to represent the distribution of light in a scene and can be separated into implicit and explicit representational methods\cite{chen2025survey3dgaussiansplatting}. 
 
-\subsection{Deliverables}
+Implicit radiance fields do not explicitly store the geometry or data of a 3D scene, instead the light distribution is implicitly represented. The most prominent method is Nerfs which are fully connected deep networks that take as input a 5d coordinate composed of x , y , z coordinates for position and two variables for viewing direction and output an opacity and RGB color value \cite{mildenhall2020nerfrepresentingscenesneural}. Although the output of Nerfs were of outstanding quality, training and rendering times were extremely high, optimizing for a single scene on a NVIDIA V100 GPU took at least one to two days.\cite{mildenhall2020nerfrepresentingscenesneural}. Although there were efforts to increase speed and reconstruction time such as TensoRF by Anpei Chen et al \cite{chen2022tensorftensorialradiancefields} which replaced the usage of MLP's with 4d tensors and matrix decomposition the speed and efficiency were still insufficient.
 
-The two main deliverables for CS comps is the code from the project, submitted together with its documentation as a GitHub link, and a paper about the project.
-While the code component is straightforward and uncontroversial, some students may chafe against the idea of a paper.
-Contrary to popular believe, the job of a software engineer does not only involve writing code.
-It also requires a large amount of written communication, such as tickets for bugs reports, proposals for new features and why it will improve the product, comments on why a class is necessary or how a function works, and documentation of the system architecture.
-As software engineers rise from junior to senior positions, these responsibilities only increase.
-It is often lamented that not enough engineers know how to write \cite{Mei2018WhyDevelopersShould,Alton2020WhyEveryDeveloper}, which is why Google has created courses on technical writing \cite{GoogleTechnicalWriting}, and ``soft skills'' are routinely touted as necessary for software developers \cite{Indeed202111ImportantSoft}.
+Explicit radiance fields directly represent the light distribution through explicit spatial structures such as a voxel grid or a set of points. For a set of points, each point needs to store its position and the radiance information which may change depending on viewing perspective. This allows for much faster access to the data but at the cost of requiring much higher memory usage , potentially lowering the feasible quality of the render. \cite{chen2025survey3dgaussiansplatting}.
 
-\begin{comment}
-    Why a paper?
-    Goals for the paper
-\end{comment}
+3D gaussians lean more towards explicit radiance fields and has its roots in EWA splatting. Zwicker et al's\cite{zwicker2002ewa} 2002 paper EWA splatting provided a novel method to effectively derive EWA splat primitives (which are elliptical gaussians projected onto screens) for volume data and point sampled surface data. This framework allowed the rendering of high quality images while reducing aliasing artifacts which cause jagged edges and flickering in the image\cite{zwicker2002ewa}.
 
-Given these goals, the final paper should be written for an advanced CS undergraduate: someone who has finished Math Foundations, Data Structures, and Computer Organization, but may not have taken the appropriate upper-level courses.
-The paper does not need to explain everything, but should provide enough relevant details so the average reader can understand your results; a walkthrough of the sections of the paper can be found in Section \ref{sec:paper}.
-The paper will be written in LaTeX, to make all final papers uniform in style and to allow for psuedocode and mathematical equations; a template will be provided and required.
-To ensure there is sufficient context and detail, the paper should be about six to ten full pages in length (excluding figures, tables, code, and references).
-The target audience for the paper is other computer science majors in their final year of college, but who may not have taken the same electives that you have.
-That is, you should assume that they have working knowledge of data structures, discrete math, and computer systems, but not necessarily any knowledge of artificial intelligence, machine learning, databases, or other more advanced topics.
+The 2023 paper 3D gaussian Splatting for Real-Time Radiance Field Rendering by Bernhard Kerbl is the foundational paper of 3D gaussian splatting. It brings three contributions. First the introduction of 3D gaussians as a flexible and expressive method of scene representation. Second, an optimization method that effects 3D position, opacity, anisotropic covariance (which dictates shape and orientation) and spherical harmonic coefficients (responsible for rgb color) as well as density control that involves splitting or cloning 3d gaussians. Third, a differentiation approach that allows real-time rendering due to the desirable properties of 3D gaussian representation\cite{kerbl20233dgaussiansplattingrealtime}. In the evaluation of this paper, running on the same hardware, both outputs were of similar quality; however, 3D gaussian splatting took only 35 to 45 minutes on average to train, while Nerfs had an average training time of 48 hours\cite{kerbl20233dgaussiansplattingrealtime}.
 
-The other major deliverable is the code, which should be made available on a public GitHub repository.
-Accompanying the code should be two pieces of documentation, both included in a \texttt{README.md}.
-First, there should be instructions for how to run the code, which should including how to find and install necessary software and packages, how to find and download relevant datasets, and what other requirements (hardware, spatial needs for VR, etc.) are needed.
-This should be written for an audience who is interested in reproducing your work and verifying your results.
-Second, there should be a brief overview of how the code is organized, including the major components that exist and the content and format of the data that is passed between them.
-This should be written for someone who is interested in extending your project --- say, by tweaking the parameters, or adding new functionality, or applying it to a new context.
+\section{Prior Work}
 
-More details about both deliverables will be provided in the Junior and Seminar Seminars.
+Many achievements have already been made in the field of 3D gaussian splatting with great focus on improving the already fast training and rendering time, as well as developing better optimizations for higher quality outputs.
 
-\begin{comment}
-    something about non-code projects?
-\end{comment}
 
-\subsection{Selecting a Comps Project}
+Scaffold-GS by Tao lu et al aims at improving output quality by approaching the problem of redundant gaussians due to the original method ignoring underlying scene geometry. For example, when capturing the interior of a room walls are of uniform color and texture which does not require a high number of gaussians. They achieve this through three contributions. First leveraging anchor points which tether a group of gaussians in order to guide the local distribution of gaussians, anchor points are initialized as the centers of voxels in a voxel grid applied to the sparse point cloud. Second, within the camera view generate 3D gaussians on the fly from anchor points using neural networks where each parameter has its own MLP to help generate the parameters taking in as input the anchor feature, relative viewing distance an direction between anchor point and camera. Third, a more optimal culling and growing strategy is developed. Local gradients of neural gaussians are used to determine the creation of a new anchor point (high gradient). The culling of anchor points is determined by a cumulative opacity value of the anchors gaussians, if the opacity value of the gaussians are to low the anchor point is culled. The evaluation of this new approach shows it consistently outperformed standard methods performing better on thin geometries, fine scale details, texture-less areas and light effects\cite{lu2023scaffoldgsstructured3dgaussians}.
 
-For many students, selecting a topics for comps is a major source of stress.
-While this is an important decision, it is also one for which you will receive a lot of support.
-Choosing a topic, together with ensuring that you have the relevant background and experience for the project, is a major component of Junior Seminar.
-There have also been students who change their project during Senior Seminar, and still finished their comps within the semester; although this is not recommended, this delayed timeline shows how much leeway there is for exploration and backpedaling.
+Mip splatting similarly focuses on improving the output images quality and accuracy but focusing more specifically on the effect of dilation due to zooming in. The work highlights how zooming in incorrectly enlarges 3D gaussians while zooming out shrinks the gaussians when projecting onto a 2D screen. The contributions of this work are a modified 3D smoothing filter and a 2D filter which reduces artifacts and aliasing when adjusting zoom\cite{yu2023mipsplattingaliasfree3dgaussian}.
 
-As a rough guide, comps projects should be equivalent to the work of an upper-level CS elective, and should either dive deeply but narrowly into a subfield of CS, or reach broadly across subfields or across disciplines without being too shallow.
-The only constraint on the topic is that CS+Math and CS+X students must select a project that fits within their theme, and should check with their academic advisor to make sure this is the case.
-Although double majors could do both comps on the same topic, they must have aspects that are unique to each major.
-For example, a cognitive science and computer science double major could do both projects around biologically plausible neural networks, but the cognitive science project might be about comparing its activity to real brains, while the CS project might instead focus on its algorithmic performance.
-We will spend more time on this in class, but you might consider the following prompts in brainstorming your project:
+Structure aware 3D gaussian like scaffold gs also focuses on the issue that the original method ignores underlying scene geometry. The paper highlights how this leads to floating points, reduced quality and expressivity of the output and artifacts. The approach to the issue is also very similar as graph neural networks are used to learn local global features for each point and MLP's are used to decode features into parameters for gaussians. The primary difference between these two approaches is one utilizes anchor points to represent a set of points while structure award 3Dgs utilizes a KNN to link points to from a point graph. The evaluation of this method illustrates outputs are of state of the art quality while reducing memory usage by up to 24x \cite{ververas2024sagsstructureaware3dgaussian}.
 
-\begin{itemize}
-    \item What topics were you most interested in from your classes? What area of CS would you like to dive deeper into?
-    \item Alternately, what topic were you unable to take a class in (either due to full enrollments, or because Oxy doesn't offer it)?
-    \item What interdisciplinary topics or CS-adjacent topics would you like to explore?
-    \item What projects might be a good showcase of your abilities to potential employers in your desired field?
-\end{itemize}
+Turbo GS which builds upon scaffold GS and Mini splatting 2 focus on optimizing training speed. Turbo GS shows the original densification strategy which is based on increasing the number of gaussians in areas with strong positional gradients fails in texture-less regions where the gradient vanishes. The paper concludes after analyzing the effect of gradients from other parameters of 3D gaussians
+that a combination of color and position gradients. Both these parameters complement each other as in flat and colorful areas position gradients fail but color gradients are effective, similarly in complex geometry but uniform color positional gradients compensate for the color gradient\cite{lu2024turbogsaccelerating3dgaussian}. Mini splatting 2 takes a different approach, identifying critical gaussians which are more likely to represent object surfaces and specifically aggressively densify these gaussians by cloning them. Critical gaussians are identified by having the maximum blending weight per viewing direction\cite{fang2024minisplatting2building360scenes}. Turbo GS additionally utilizes selective densification strategy that reduces the threshold number of times a critical gaussian can be visited by half if the number of times visited is above the current threshold\cite{lu2024turbogsaccelerating3dgaussian}. Mini splatting 2 instead incorporates additional culling strategies that uses visibility determined by accumulated blending weights to discard certain gaussians for more efficient rendering\cite{fang2024minisplatting2building360scenes}.
 
-A list of past comps projects can be found online.\footnote{\url{https://www.oxy.edu/academics/areas-study/computer-science/past-senior-comps-projects}}
+Other notable works include MV splat  and 2D gaussian splatting. Mv splat contributes a method to train 3D gaussians with sparse images while still providing clean outputs \cite{Chen_2024}.2D gaussian splatting presents a novel method which uses circular discs instead of 3d ellipses for better surface representation as discs can be aligned tangentially to surface planes\cite{Huang2DGS2024}.
 
-\section{Interlude: Using \LaTeX}
+\section{Methods}
 
-LaTeX (pronounced \textit{lah-teck} or \textit{lay-teck}), often stylized as {\LaTeX} and written as latex, is a document markup language and typesetting system.
-Building on the {\TeX} language created by Donald Knuth in 1978, LaTeX provides additional commands for common document needs such as sections, figures, and bibliographies.
-LaTeX is widely used in academia, especially in mathematical fields, due to how easy it is to write mathematical equations and its automatic management of references.
-Since it is a markup language, LaTeX source files are written in plain text, which also makes it compatible with version control systems like git.
+The primary components of traditional 3Dgs include a sfm sparse point cloud initialization, an optimization step and rendering step. From the sparse point cloud 3D gaussians are initialized defined by a covariance, mean and opacity. Optimization is then applied to these parameters through gradient descent and during this process density control is also applied cloning or splitting gaussians.\cite{kerbl20233dgaussiansplattingrealtime} The rendering step is possible due to Zwicker et al's EWA splatting paper\cite{zwicker2002ewa} which provides a crucial equation where the covariance of the 3D gaussian can be mapped to 2D easily (where W is the camera transformation matrix and J is the jacobian matrix).
+\[
+\Sigma'_{\text{camera}} = J W \Sigma_{\text{world}} W^T J^T 
+\]
+A fast tile based rasterization that allows alpha blending of the splats is then applied to render the image in order to compute loss and update gradients\cite{kerbl20233dgaussiansplattingrealtime}. 
 
-The most primitive syntax of LaTeX is the \textit{macro} or \textit{command}, which is always written with a backslash followed by the name of the command.
-The {\LaTeX} glyph, for example, can be created with the command \texttt{\textbackslash LaTeX}.
-Some commands take parameters, which are denoted in braces (e.g., \texttt{\textbackslash usepackage\{biblatex\}} will import the \texttt{biblatex} package), with some commands additionally accepting options in square brackets (e.g., \texttt{\textbackslash usepackage[style=numeric]\{biblatex\}}).
-The \texttt{\textbackslash begin} and \texttt{\textbackslash end} commands are special, as they indicate the start and end of an \textit{environment}.
-The content of a LaTeX document, for example, is surrounded by \texttt{\textbackslash begin\{document\}} and \texttt{\textbackslash end\{document\}}, indicating the text that should appear in the document.
+Turbo GS improves upon this framework by improving the initialization step and the densification strategy. As mentioned previously a better densification strategy using a combination of color and positional gradients is used to determine whether to split gaussians. Additionally a selective strategy is applied to densification where gaussians that are visited above a threshold number of times are eligible to spawn new gaussians and gaussians consistently below the threshold have it halved. The authors also constrain the maximum number of gaussians allowed. Through their investigations they found the relation between fitting iterations and model convergence follows a power function and so apply a power law based budget schedule to ensure a controlled convergence process. The authors optimize initialization by constructing a K dimensional tree with the initial sparse points and employ a NN method to generate additional points increasing the density of the point cloud. This provides a more effective foundation for training. Other optimizations are also applied in various areas such as during training only a subset of pixels in a chessboard pattern are rendered to increase speed while providing sufficient information. In a test case of rendering a bicycle turbo GS achieved a convergence time of 13 minutes compared to standard 3DGS which took 187 minutes\cite{lu2024turbogsaccelerating3dgaussian}. 
 
-\begin{figure}
-    \centering
-    \includegraphics[width=.95\linewidth]{recursion.png}
-    \caption{
-        The current page of this paper, as an image.
-    }
-    \label{fig:first-page}
-\end{figure}
 
-Beyond the basic syntax, much of learning LaTeX is learning the different commands and environments that exist.
-For example, text can be made \textbf{bold} with \texttt{\textbackslash textbf}, \textit{italic} with \texttt{\textbackslash textit}, and \texttt{monospaced} with \texttt{\textbackslash texttt} (the \texttt{tt} stands for for ``teletype'').
-Single dollar signs denote inline equations, so \texttt{\$E = mc\textasciicircum 2\$} will be rendered as $E = mc^2$.
-Double dollar signs will render the equation in display mode, which we can see with the quadratic formula:
+\section{Evaluation metrics}
 
-$$\frac{{-b \pm \sqrt {b^2 - 4ac} }}{{2a}}$$
+Some of the most common full reference image measures in this field are SSIM, PSNR and LPIPs. PSNR is the most simple of the three and stands for peak signal to noise ratio, it is a measure related to mean squared error and its popularity stems from its simple calculations, clear physical meanings and easy mathematical optimization. However, due to its simplicity it cannot measure perceived visual quality which often focuses on structural aspects\cite{1284395}. An example of such a case would be the comparison between an image with gaussian noise applied and the same image but instead with blur applied. When comparing both images to the original picture it is likely the image with blur applied will have a higher PSNR score than the image with gaussian noise. This is because PSNR measures pixel wise differences and gaussian noise adds random differences while blurring only spreads the difference. However, the image with noise is likely of higher visual quality as the overall structure and edges are often preserved, but blurring the image destroys structural features.
 
-There are also a handful of common environments:
+SSIM tries to solve PSNR's failure to capture structural information and aptly stands for structural similarity index measure. The paper describes a new philosophy to approach the problem;. First rather than using perceived errors to quantify image degradation, it is treated as perceived structural changes instead. Second the original error sensitivity is a bottom up approach (looking at details then big picture) where as this new approach is top down. SSIM separates similarity measurement into three different and relatively independent components, luminesce, contrast and structure. Luminesce comparison is done with mean intensity, contrast with the standard deviation and structure is compared with the correlation coefficient which is the normalized covariance\cite{1284395}. 
 
-\begin{itemize}
-    \item \texttt{itemize} for bulletpoint lists
-    \item \texttt{enumerate} for numbered lists
-    \item \texttt{figure} for figures (see Figure \ref{fig:first-page})
-    \item \texttt{table} and \texttt{tabular} for tables (see Table \ref{tbl:timeline})
-    \item \texttt{lstlisting} for code listings (see Listing \ref{lst:python-hello-world})
-\end{itemize}
+Although more qualified as a measure than PSNR SSIM still fails in certain cases. The paper Understanding SSIM describes an extremely specific case where SSIM fails. The base picture is that of earth from the moon with the test picture being an almost identical image, except with the surface of the moon being of higher luminesce and the sentence "Houston we have a problem" hidden in the black area in a shade that makes it almost undetectable at a glance. The first difference is much more obvious to most people and the embedded phrase is almost invisible however SSIM gives a higher error to the phrase than the clear difference in luminesce\cite{nilsson2020understandingssim}.
 
-\begin{lstlisting}[
-    language=Python,
-    caption={Hello, World! in Python},
-    label={lst:python-hello-world},
-    float
-]
-def hello():
-    print('hello, world!')
-\end{lstlisting}
+The most popular measure which emulates HVS to an impressive level of fidelity is Learned Perceptual Image Patch Similarity (LPIPS). LPIPS is a direct result deep learning. Researchers found that the internal activations of high level classification networks without further calibration corresponds almost perfectly to human visual judgment. The authors notes even simple unsupervised networks with initialization using multi stage K means clustering outperform traditional measures like SSIM by a large margin\cite{zhang2018unreasonableeffectivenessdeepfeatures}.
 
-This covers the most frequently used commands, but as you might have already inferred, LaTeX is a vast and deep system, and can easily be overwhelming.
-We recommended reading through the \citetitle{Overleaf2021LearnLaTeXIn} tutorial \cite{Overleaf2021LearnLaTeXIn} and using the \citetitle{WikiBook2022LaTeX} \cite{WikiBook2022LaTeX} as reference.
-Beyond that, you should examine and play with the source of this document to gain working proficiency with LaTeX.
+Additional useful measures in this field are training time and memory and storage usage as a majority of the research is aimed towards faster algorithms and cheaper methods of achieving similar quality as shown in TurboGS\cite{lu2024turbogsaccelerating3dgaussian} and Structure aware GS\cite{ververas2024sagsstructureaware3dgaussian}.
 
-One final note on writing in LaTeX.
-Since LaTeX is only a markup language, the source files must be compiled into a viewable form, most commonly into a PDF file.
-The source of this document is made up of several files, each with its own purpose:
-\begin{itemize}
-    \item \texttt{document.tex} - The main LaTeX file containing the contents of the document.
-    \item \texttt{oxycomps.sty} - A style file with settings for what the document should look like.
-    \item \texttt{references.bib} - A list of bibliography items.
-    \item Other files containing images, build instructions, etc.
-\end{itemize}
-Manual compilation of these files is somewhat esoteric, as it requires multiple uses of the \texttt{pdflatex} and \texttt{biblatex} commands.
-Instead, it is much easier to use tools such as \texttt{pdflatex} or \texttt{latexmk} (in the terminal) or Overleaf (online) for compilation.
-We have also provided a \texttt{Makefile} which will automatically update the document as necessary; the use of makefiles is beyond the scope of this document, but see \textcite{Lambert2021MakefileTutorial}.
-
-\begin{comment}
-No definition citations, unless the term itself is in dispute
-Separate problem background from technical background
-    Unclear if games and apps require much technical background
-    The general structure of the framework might be better suited for the Architecture Overview section
-        Eg. Flask uses decorators to associate functions with URLs
-        Eg. Unity has scripts associated with objects and specific triggers, such as walking into an area, pressing a button, etc.
-    Maybe a better name is "algorithmic background"?
-        Should explore what does and doesn't count
-            All ML counts
-            App and game frameworks do not
-        Framework vs. library?
-            I like the idea of [inversion of control](https://martinfowler.com/bliki/InversionOfControl.html), but that may be too abstract for students to understand
-        Heuristic: is understanding that system necessary to understand the results?
-            Ie. How Flask or Unity works doesn't influence whether the app/game is useful/fun/engaging
-            But how (say) linear regression works is highly relevant for why the results match/don't match the actual values
-\end{comment}
-
-\section{The Oxy CS Comps Paper}
-\label{sec:paper}
-
-This section will walk through the different sections of the comps final paper.
-Note that your specific paper may not have all these sections; for example, it is common for app design projects to combine the methods and evaluation sections, to better match the iterative design process.
-Nonetheless, your paper should have all of the \textit{content} described here.
-
-\subsection{Introduction and Problem Context}
-
-This section should motivate why the project is interesting both to you and to the computer science community or the general public.
-You should also justify the difficult of the project.
-As a rough guideline, your project should be either narrow but deep in a subfield of CS, or broadly reaching across subfields without being too shallow.
-It should be comparable to the amount of work/content in an upper-level elective.
-
-\subsection{Technical Background}
-
-This section introduces the technical knowledge necessary to understand your project, including any terminology and algorithms.
-You should assume that the reader is a CS undergraduate like yourself, but not necessarily familiar with AI/ML/HCI/apps/video games/etc.
-
-\subsection{Prior Work}
-
-This section describes of related and/or existing work.
-This could be scientific or scholarly, but may also be a survey of existing products/games.
-The goal of this section is to put your project in the context of what has already been done.
-
-\subsection{Methods}
-
-This section describes what exactly you will be working on.
-What are you building? How will it combine/incorporate ideas from the literature? Be specific about what you will be doing: talk about the specific algorithm you will implement/use, the specific dataset/platform/API, and what the outcome of your project will look like.
-All of these decisions should be justified as well.
-
-\subsection{Evaluation Metrics}
-
-This section describes how you will evaluate your project.
-What will you be measuring, and how will you measure it?
-You might think about what would result in an F, a C, or an A for comps.
-Alternately, think about what are the minimal requirements for passing the class, what you might do if you had more time and resources, and what the best case scenario would be if everything went swimmingly.
-
-\subsection{Results and Discussion}
-
-limitations
-
-\subsection{Ethical Considerations}
-
-Are there any ethical concerns that might arise from your project?
-You might think about whether your project perpetuates societal inequity (or could be used by others to do so), whether the data/platforms you are using is collected with informed consent and free of bias, and whether you might be subject to technological solutionism instead of working support/better the public infrastructure.
-Include a discussion of how you plan to mitigate these issues in your project.
-
-\subsection{Timeline}
-
-A timeline of major milestones, with specific items to be completed by specific dates/months.
-Note that this timeline must start over the summer; otherwise you will unlikely have enough time to complete a project of the expected scope.
-As part of the discussion around your timeline, talk about what you already know that would help you with the project, and what you expect to have to learn to be successful.
-Include programming languages, technical concepts, as well as processes (e.g., user testing).
-
-\subsection{Replication Instructions}
-
-This section will demonstrate that you have thought through the basics of how your code will work. You should include a diagram of the overall data flow of your program, including what the inputs and outputs of each component will be, and how they will be represented.
-
-\subsection{Code Overview}
-
-\subsection{Appendices}
-
-\section{Project-Specific Guidance}
-
-\subsection{Machine Learning}
-
-\subsection{Mobile and Web Apps}
-
-\subsection{Games and Experiences}
-
-\section{Tips and Advice}
-
-\subsection{The Academic Voice}
-
-Although you may already have a lot of practice with college-level writing, the \cite{InkAndSwitch2022AcademishVoice}
+In terms of training speed comparisons and standards turbo GS uses the MipNeRF-360 data set for evaluation. 3DGS which is the baseline takes on average 30 minutes, other methods like Mini splatting and EAGLES takes around 20 minutes. Turbo GS takes on average only 5 minutes\cite{lu2024turbogsaccelerating3dgaussian}. The paper reports that in terms of quality turboGS also consistently preserves finer high frequency details in regions such as grass, pavement and floor which is absent in other implementations. In the MipNeRF-360 data set turbo gs has the second lowest lpips score 0.210 , the lowest being 0.188 with MIP splatting\cite{lu2024turbogsaccelerating3dgaussian} (lower lpip score means greater similarity). Although turbo gs does not have the greatest memory requirement at 240MB compared to the lowest memory requirement of 48MB by instant-NGP it is still significantly better than a majority of implementations.
 
 \printbibliography
 
-\appendix
-
-\clearpage
-
-\onecolumn
-
-\section{Paper Rubric}
-\begin{landscape}\small
-\begin{longtable}{p{0.19\linewidth} | p{0.19\linewidth} | p{0.19\linewidth} | p{0.19\linewidth} | p{0.19\linewidth}}
-\textbf{CONTENT AREA}
-    & \textbf{Excellent}
-    & \textbf{Good}
-    & \textbf{Marginal}
-    & \textbf{Unacceptable} \\
-\toprule \endhead
-\textbf{Problem Statement} - What problem are you solving? Why is it important?
-    & \cellcolor{excellent} The problem to be solved is clearly stated, and its importance and value clearly laid out. All relevant societal context is discussed, as it relates to and will influence the project.
-    & \cellcolor{good} The problem to be solved is clearly stated, but its importance and value overstated. Most relevant societal context is discussed, but may need clarification on how it relates to or will influence the project.
-    & \cellcolor{marginal} The problem to be solved is only vaguely stated, and its importance and value overstated. Significant social context is missing, or the context does not readily relate to the project.
-    & \cellcolor{unacceptable} There is no clear problem to be solved, with minimal explanation of the importance/value of the project. Little to no societal context is presented. \\
-\midrule
-\textbf{Technical Background} - What does someone need to know to understand the problem?
-    & \cellcolor{excellent} All technical terms are defined as they are used and understandable for the average CS student. Relevant mathematical and algorithmic concepts are introduced and explained.
-    & \cellcolor{good} Most technical terms are defined as they are used, but may require additional study for the average CS student. Some relevant mathematical and algorithmic concepts are missing.
-    & \cellcolor{marginal} Most technical terms are defined, or include jargon not understandable by the average CS student. Many relevant mathematical and algorithmic concepts are missing.
-    & \cellcolor{unacceptable} The importance/value of the project is never explained. Many technical terms are undefined, or include jargon only the author understands. The necessary mathematical and algorithmic concepts are missing. \\
-\midrule
-\textbf{Prior Work} - How have other people solved similar problems? What inspirations are you drawing from?
-    & \cellcolor{excellent} All literature/prior work cited is relevant, and no relevant literature/work is missing. Papers are discussed in thematic groups, highlighting how they are connected. The discussion highlights how the literature influenced the project.
-    & \cellcolor{good} The majority of the literature cited is relevant, but may be missing important areas of review. Papers are discussed in thematic groups, but with missing connections. Irrelevant details may be included in the description and key contributions to the project may be missing.
-    & \cellcolor{marginal} Most of the literature/work cited is relevant, but many are not or may be missing. Papers are discussed in thematic groups, but with little or no connections. Descriptions include many irrelevant details, with unclear or missing contributions to the project.
-    & \cellcolor{unacceptable} Most of the literature/work cited is irrelevant to the project. Papers are discussed individually with minimal connections. Significant or foundational work in the area is not included. Descriptions include irrelevant details or incorrect claims. \\
-\midrule
-\textbf{Methods} - How did you go about solving the problem? What did you do?
-    & \cellcolor{excellent} The approach to the project is clearly laid out, and justified with respect to literature and the goals of the project. Intermediate decisions are explained and evidence for choosing between approaches presented. Prior and current work is clearly delineated.
-    & \cellcolor{good} The approach to the project is laid out and justified, with minor details missing. Intermediate decisions may be missing. Alternative approaches are listed, but not the evidence for rejecting them. Prior and current work is delineated, with some areas of confusion
-    & \cellcolor{marginal} The approach to the project is laid out, with insufficient detail. Intermediate decisions are not mentioned. The methods are only barely justified. No consideration to alternate approaches is given. The boundary between prior and current work is unclear.
-    & \cellcolor{unacceptable} No methods, or methods that do not correspond to what was actually done. Intermediate decisions are unexplained and inexplicable. Prior and current work is muddled, or work is overstated or plagiarized. \\
-\midrule
-\textbf{Evaluation Metrics} - How will we know that the problem has been solved?
-    & \cellcolor{excellent} The metrics used and method of collection are appropriate, clearly explained, and justified with respect to the literature and the problem to be solved. Other metrics and why they are not used are discussed.
-    & \cellcolor{good} The metrics used and method of collection are appropriate and clearly explained, although the justification may need work. Some other metrics are considered, but with weak reasons for not using them.
-    & \cellcolor{marginal} The metrics used and method of collection are marginally appropriate, but not clearly explained and with minimal justification. No other metrics were considered.
-    & \cellcolor{unacceptable} No metrics were given, or the specific method of calculation unclear. The metrics are not justified or do not match the goals of the project. \\
-\midrule
-\textbf{Results and Discussion} - Did you actually solve the problem? Why/Why not?
-    & \cellcolor{excellent} The stated metrics are used and the results explained with respect to the methods. Alternate explanations and caveats to the results are explored. The results are connected to the goals of the project.
-    & \cellcolor{good} The stated metrics are used and the results explained, although they may not be verified. Some caveats are listed, but alternate explanations are not considered. The results are connected to the goals of the project.
-    & \cellcolor{marginal} The stated metrics are used, but with no explanation of why those results occurred. Little to no caveats or alternate explanations are explored. The results have minimal connection to the goals of the project.
-    & \cellcolor{unacceptable} No results, or results that do not match the evaluation metrics or the project goals. \\
-\midrule
-\textbf{Ethical Considerations} - Why might people want to be careful about your project? What difficult decisions did you have to make?
-    & \cellcolor{excellent} The project is considered both in its complete technological and societal context. Issues of bias and diversity are explored in detail, and potential contributions to global and local inequity examined. Relevant literature is cited.
-    & \cellcolor{good} Both technological and societal context of the project is explored, although some considerations may be missing. Issues of bias and diversity are explored, as are potential contributions to global and local inequity. Little to no relevant literature is cited.
-    & \cellcolor{marginal} Only one of technological or societal context is considered, in insufficient detail. Issues of bias and diversity are explored in brief, as are contributions to global/local inequity. No relevant literature is cited. 
-    & \cellcolor{unacceptable} Ethical considerations are non existent or perfunctory. Issues of bias and diversity are glossed over or ignored, as are potential contributions to global and local inequity. Little to no relevant literature is cited. \\
-\midrule
-\textbf{Replication Instructions} - How would someone else use your project? (this should be an appendix to your paper; this does not count towards your page requirement/limit)
-    & \cellcolor{excellent} All software used by the project is listed, with instructions that successfully allow another CS student to execute it. Particular attention is paid to future-proving the instructions (eg. package version, VMs, etc.)
-    & \cellcolor{good} All software used by the project is listed, with instructions that successfully allow another CS student to execute it. Reproduction may require additional steps (eg. unguided installation of software).
-    & \cellcolor{marginal} Some software or steps for reproducing the project are missing or incorrect, requiring minor fixes. Reproduction may require additional steps (eg. unguided installation of software).
-    & \cellcolor{unacceptable} Some software or steps for reproducing the project are missing or incorrect, requiring major fixes or debugging. Additional requirements may be missing entirely and uninferable from what is provided. \\
-\midrule
-\textbf{Code Architecture Overview} - How would someone else extend your project? (this should be an appendix to your paper; this does not count towards your page requirement/limit)
-    & \cellcolor{excellent} The organization of the code is clearly laid out/diagrammed, with justification. Another developer could use the overview to extend or debug the project.
-    & \cellcolor{good} The organization of the code with incomplete justification. Another developer could discuss the merits of the code, but not contribute.
-    & \cellcolor{marginal} Boundaries between project components are awkward. The text is descriptive of the organization but does not aid understanding. Another developer will have trouble understanding the code.
-    & \cellcolor{unacceptable} Boundaries between project components are bizarre or non-existent. Another developer is better off starting from scratch. \\
-\end{longtable}
-\end{landscape}
-
 \end{document}
+
